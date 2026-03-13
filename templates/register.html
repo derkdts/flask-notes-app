@@ -6,8 +6,8 @@
     <title>Регистрация | CloudNotes</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-    <div class="container auth-container">
+<body class="auth-page">
+    <div class="container">
         <div class="glass-card auth-form">
             <h2>Регистрация</h2>
             {% with messages = get_flashed_messages() %}

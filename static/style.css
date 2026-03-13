@@ -23,6 +23,19 @@ body {
     min-height: 100vh;
 }
 
+/* Centering for Welcome/Auth pages */
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.auth-page .container {
+    width: 100%;
+    max-width: 450px;
+}
+
 .container {
     width: 100%;
     max-width: 800px;
