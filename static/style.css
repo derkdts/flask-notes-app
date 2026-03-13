@@ -103,44 +103,71 @@ button:hover {
     transform: translateY(-1px);
 }
 
-.notes-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-}
-
-.note-card {
+.notes-accordion {
     display: flex;
     flex-direction: column;
+    gap: 0.25rem;
 }
 
-.note-header {
+.note-accordion-item {
+    padding: 0;
+    overflow: hidden;
+    cursor: pointer;
+    margin-bottom: 0;
+}
+
+.note-accordion-item[open] {
+    transform: none;
+}
+
+.note-summary {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1rem;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    list-style: none;
+    transition: background-color 0.2s ease;
+}
+
+.note-summary::-webkit-details-marker {
+    display: none;
+}
+
+.note-summary:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.note-header-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
 }
 
 .note-title {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     font-weight: 700;
     color: var(--accent-color);
 }
 
-.note-content {
+.note-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.75rem;
     color: var(--text-secondary);
-    line-height: 1.6;
-    flex-grow: 1;
-    white-space: pre-wrap;
+    opacity: 0.6;
 }
 
-.note-footer {
-    margin-top: 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.75rem;
-    color: rgba(148, 163, 184, 0.5);
+.note-content-wrapper {
+    padding: 0 2rem 1.5rem 2rem;
+    border-top: 1px solid var(--glass-border);
+    animation: slideDown 0.3s ease-out;
+}
+
+.note-content {
+    color: var(--text-primary);
+    line-height: 1.6;
+    white-space: pre-wrap;
+    padding-top: 1rem;
 }
 
 .delete-btn {
@@ -150,14 +177,20 @@ button:hover {
     cursor: pointer;
     font-size: 0.875rem;
     width: auto;
-    padding: 0;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    transition: all 0.2s ease;
 }
 
 .delete-btn:hover {
-    color: #f87171;
-    transform: none;
-    background: none;
-    text-decoration: underline;
+    color: #fff;
+    background: #ef4444;
+    transform: scale(1.05);
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeIn {
@@ -165,6 +198,6 @@ button:hover {
     to { opacity: 1; transform: translateY(0); }
 }
 
-.note-card {
+.note-accordion-item {
     animation: fadeIn 0.4s ease forwards;
 }

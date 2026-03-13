@@ -27,22 +27,27 @@
             </form>
         </section>
 
-        <div class="notes-grid">
+        <div class="notes-accordion">
             {% for note in notes %}
-                <div class="glass-card note-card">
-                    <div class="note-header">
-                        <h3 class="note-title">{{ note['title'] }}</h3>
+                <details class="glass-card note-accordion-item">
+                    <summary class="note-summary">
+                        <div class="note-header-info">
+                            <h3 class="note-title">{{ note['title'] }}</h3>
+                            <div class="note-meta">
+                                <span class="note-date">{{ note['created_at'].split(' ')[0] }}</span>
+                                <span class="note-time">{{ note['created_at'].split(' ')[1] }}</span>
+                            </div>
+                        </div>
+                        <a href="{{ url_for('delete_note', note_id=note['id']) }}" class="delete-btn" onclick="event.stopPropagation(); return confirm('Вы уверены?')">Удалить</a>
+                    </summary>
+                    <div class="note-content-wrapper">
+                        <div class="note-content">{{ note['content'] }}</div>
                     </div>
-                    <div class="note-content">{{ note['content'] }}</div>
-                    <div class="note-footer">
-                        <span>{{ note['created_at'] }}</span>
-                        <a href="{{ url_for('delete_note', note_id=note['id']) }}" class="delete-btn" onclick="return confirm('Вы уверены?')">Удалить</a>
-                    </div>
-                </div>
+                </details>
             {% endfor %}
             
             {% if not notes %}
-                <p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); opacity: 0.5;">Заметок пока нет...</p>
+                <p style="text-align: center; color: var(--text-secondary); opacity: 0.5; margin-top: 2rem;">Заметок пока нет...</p>
             {% endif %}
         </div>
     </div>
