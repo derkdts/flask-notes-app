@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добро пожаловать | CloudNotes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .welcome-actions {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+        }
+        .welcome-btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            text-decoration: none;
+            border-radius: 0.75rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        .login-btn {
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            color: #fff;
+        }
+        .register-btn {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+        }
+        .register-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container welcome-container">
+        <div class="hero glass-card">
+            <h1>CloudNotes</h1>
+            <p>Ваше личное пространство для мыслей, идей и заметок. Организуйте свою жизнь красиво и эффективно.</p>
+            <div class="welcome-actions">
+                <a href="{{ url_for('login') }}" class="welcome-btn login-btn">Войти</a>
+                <a href="{{ url_for('register') }}" class="welcome-btn register-btn">Регистрация</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Управление категориями | CloudNotes</title>
+    <title>Статистика | CloudNotes</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body class="admin-wrapper">
@@ -11,8 +11,8 @@
         <div class="sidebar-logo">CloudNotes</div>
         <nav class="sidebar-nav">
             <a href="{{ url_for('admin') }}" class="sidebar-link">Заметки</a>
-            <a href="{{ url_for('manage_categories') }}" class="sidebar-link active">Категории</a>
-            <a href="{{ url_for('stats') }}" class="sidebar-link">Статистика</a>
+            <a href="{{ url_for('manage_categories') }}" class="sidebar-link">Категории</a>
+            <a href="{{ url_for('stats') }}" class="sidebar-link active">Статистика</a>
             <a href="{{ url_for('manage_users') }}" class="sidebar-link">Доступ</a>
         </nav>
         <div class="sidebar-footer">
@@ -26,39 +26,29 @@
 
     <main class="admin-content">
         <header>
-            <h1>Управление категориями</h1>
+            <h1>Статистика категорий</h1>
         </header>
-
-        <section class="glass-card" style="margin-bottom: 2rem; padding: 2rem;">
-            <h3>Добавить категорию</h3>
-            <form action="{{ url_for('add_category') }}" method="POST" style="display: flex; gap: 1rem; margin-top: 1rem;">
-                <input type="text" name="name" placeholder="Название категории..." required style="flex: 1;">
-                <button type="submit" style="width: auto; padding: 0 2rem;">Добавить</button>
-            </form>
-        </section>
 
         <section class="glass-card">
             <table class="admin-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Название</th>
-                        <th>Действия</th>
+                        <th>Категория</th>
+                        <th>Количество заметок</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for cat in categories %}
+                    {% for stat in stats %}
                     <tr>
-                        <td>{{ cat['id'] }}</td>
-                        <td><span class="category-pill">{{ cat['name'] }}</span></td>
-                        <td class="actions">
-                            <a href="{{ url_for('delete_category', cat_id=cat['id']) }}" class="delete-link" onclick="return confirm('Удалить категорию? Все связи с заметками также будут удалены.')">Удалить</a>
+                        <td>
+                            <span class="category-pill">{{ stat['name'] }}</span>
                         </td>
+                        <td>{{ stat['count'] }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
-            {% if not categories %}
+            {% if not stats %}
                 <p style="text-align: center; color: var(--text-secondary); opacity: 0.5; padding: 2rem;">Категорий пока нет.</p>
             {% endif %}
         </section>

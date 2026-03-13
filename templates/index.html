@@ -7,13 +7,19 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <div class="user-control">
+        <span class="username-tag">{{ current_user.username }}</span>
+        {% if current_user.role == 'admin' %}
+            <a href="{{ url_for('admin') }}" class="admin-link">Админпанель</a>
+        {% endif %}
+        <a href="{{ url_for('logout') }}" class="logout-link">Выход</a>
+    </div>
+
     <div class="container">
         <header>
             <h1>CloudNotes</h1>
-            <p style="color: var(--text-secondary)">Ваше личное хранилище заметок (Flask)</p>
             <nav class="main-nav">
-                <button id="openModal" class="create-btn">+ Создать заметку</button>
-                <a href="{{ url_for('admin') }}" class="admin-link">Админпанель</a>
+                <button id="addNoteBtn" class="create-btn">+ Создать заметку</button>
             </nav>
         </header>
 
