@@ -36,6 +36,7 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Автор</th>
                         <th>Заголовок</th>
                         <th>Категории</th>
                         <th>Дата</th>
@@ -46,6 +47,7 @@
                     {% for note in notes %}
                     <tr>
                         <td>{{ note['id'] }}</td>
+                        <td><span class="username-tag" style="font-size: 0.8rem;">{{ note['author'] or 'System' }}</span></td>
                         <td>{{ note['title'] }}</td>
                         <td>
                             <div class="category-list">

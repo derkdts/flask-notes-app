@@ -46,9 +46,11 @@ def init_db():
         );
         CREATE TABLE IF NOT EXISTS notes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
             title TEXT NOT NULL,
             content TEXT NOT NULL,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE SET NULL
         );
         CREATE TABLE IF NOT EXISTS categories (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -130,7 +132,10 @@ def logout():
 @login_required
 def index():
     conn = get_db_connection()
-    notes_rows = conn.execute('SELECT * FROM notes ORDER BY created_at DESC').fetchall()
+    if current_user.role == 'admin':
+        notes_rows = conn.execute('SELECT * FROM notes ORDER BY created_at DESC').fetchall()
+    else:
+        notes_rows = conn.execute('SELECT * FROM notes WHERE user_id = ? ORDER BY created_at DESC', (current_user.id,)).fetchall()
     notes = []
     for row in notes_rows:
         note = dict(row)
@@ -157,7 +162,7 @@ def add_note():
     if title and content:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute('INSERT INTO notes (title, content) VALUES (?, ?)', (title, content))
+        cursor.execute('INSERT INTO notes (user_id, title, content) VALUES (?, ?, ?)', (current_user.id, title, content))
         note_id = cursor.lastrowid
         
         for cat_id in category_ids:
@@ -181,7 +186,12 @@ def admin():
     if current_user.role != 'admin':
         return redirect(url_for('index'))
     conn = get_db_connection()
-    notes_rows = conn.execute('SELECT * FROM notes ORDER BY created_at DESC').fetchall()
+    notes_rows = conn.execute('''
+        SELECT n.*, u.username as author 
+        FROM notes n 
+        LEFT JOIN users u ON n.user_id = u.id 
+        ORDER BY n.created_at DESC
+    ''').fetchall()
     notes = []
     for row in notes_rows:
         note = dict(row)
@@ -198,13 +208,21 @@ def admin():
 @app.route('/delete/<int:note_id>')
 @login_required
 def delete_note(note_id):
-    if current_user.role != 'admin':
-        return redirect(url_for('index'))
     conn = get_db_connection()
+    note = conn.execute('SELECT user_id FROM notes WHERE id = ?', (note_id,)).fetchone()
+    if not note:
+        conn.close()
+        return "Note not found", 404
+        
+    if current_user.role != 'admin' and note['user_id'] != current_user.id:
+        conn.close()
+        flash('У вас нет прав для удаления этой заметки')
+        return redirect(url_for('index'))
+
     conn.execute('DELETE FROM notes WHERE id = ?', (note_id,))
     conn.commit()
     conn.close()
-    return redirect(url_for('admin'))
+    return redirect(url_for('admin' if current_user.role == 'admin' else 'index'))
 
 @app.route('/admin/categories')
 @login_required
@@ -280,9 +298,17 @@ def delete_user(user_id):
 @app.route('/edit/<int:note_id>', methods=['GET', 'POST'])
 @login_required
 def edit_note(note_id):
-    if current_user.role != 'admin':
-        return redirect(url_for('index'))
     conn = get_db_connection()
+    note_row = conn.execute('SELECT * FROM notes WHERE id = ?', (note_id,)).fetchone()
+    
+    if not note_row:
+        conn.close()
+        return "Note not found", 404
+        
+    if current_user.role != 'admin' and note_row['user_id'] != current_user.id:
+        conn.close()
+        flash('У вас нет прав для редактирования этой заметки')
+        return redirect(url_for('index'))
     if request.method == 'POST':
         title = request.form.get('title')
         content = request.form.get('content')
