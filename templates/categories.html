@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление категориями | CloudNotes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container admin-container">
+        <header>
+            <h1>Управление категориями</h1>
+            <nav class="admin-nav">
+                <a href="{{ url_for('admin') }}" class="nav-link">← Назад к заметкам</a>
+            </nav>
+        </header>
+
+        <section class="glass-card">
+            <h2>Добавить категорию</h2>
+            <form action="{{ url_for('add_category') }}" method="POST" class="form-horizontal">
+                <div class="form-group" style="flex-grow: 1; margin-bottom: 0;">
+                    <input type="text" name="name" placeholder="Название категории..." required>
+                </div>
+                <button type="submit" style="width: auto;">Добавить</button>
+            </form>
+        </section>
+
+        <section class="glass-card">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Название</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cat in categories %}
+                    <tr>
+                        <td>{{ cat['name'] }}</td>
+                        <td class="actions">
+                            <a href="{{ url_for('delete_category', cat_id=cat['id']) }}" class="delete-link" onclick="return confirm('Удаление категории также отвяжет её от всех заметок. Вы уверены?')">Удалить</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% if not categories %}
+                <p style="text-align: center; color: var(--text-secondary); opacity: 0.5;">Категорий пока нет.</p>
+            {% endif %}
+        </section>
+    </div>
+</body>
+</html>

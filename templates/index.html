@@ -11,21 +11,42 @@
         <header>
             <h1>CloudNotes</h1>
             <p style="color: var(--text-secondary)">Ваше личное хранилище заметок (Flask)</p>
+            <nav class="main-nav">
+                <button id="openModal" class="create-btn">+ Создать заметку</button>
+                <a href="{{ url_for('admin') }}" class="admin-link">Админпанель</a>
+            </nav>
         </header>
 
-        <section class="glass-card">
-            <form action="{{ url_for('add_note') }}" method="POST">
-                <div class="form-group">
-                    <label for="title">Заголовок</label>
-                    <input type="text" name="title" id="title" placeholder="Введите название..." required>
-                </div>
-                <div class="form-group">
-                    <label for="content">Содержание</label>
-                    <textarea name="content" id="content" rows="4" placeholder="Ваши мысли..." required></textarea>
-                </div>
-                <button type="submit">Сохранить заметку</button>
-            </form>
-        </section>
+        <!-- Modal for Note Creation -->
+        <div id="noteModal" class="modal">
+            <div class="modal-content glass-card">
+                <span class="close-modal">&times;</span>
+                <h2>Новая заметка</h2>
+                <form action="{{ url_for('add_note') }}" method="POST">
+                    <div class="form-group">
+                        <label for="title">Заголовок</label>
+                        <input type="text" name="title" id="title" placeholder="Введите название..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">Содержание</label>
+                        <textarea name="content" id="content" rows="4" placeholder="Ваши мысли..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="category_ids">Категории (удерживайте Ctrl для выбора нескольких)</label>
+                        <select name="category_ids" id="category_ids" multiple>
+                            {% for cat in all_categories %}
+                                <option value="{{ cat['id'] }}">{{ cat['name'] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="new_category">Или создайте новую</label>
+                        <input type="text" name="new_category" id="new_category" placeholder="Название новой категории...">
+                    </div>
+                    <button type="submit">Сохранить заметку</button>
+                </form>
+            </div>
+        </div>
 
         <div class="notes-accordion">
             {% for note in notes %}
@@ -33,12 +54,16 @@
                     <summary class="note-summary">
                         <div class="note-header-info">
                             <h3 class="note-title">{{ note['title'] }}</h3>
-                            <div class="note-meta">
+                            <div class="category-list">
+                                {% for cat_name in note['categories'] %}
+                                    <span class="category-pill">{{ cat_name }}</span>
+                                {% endfor %}
+                            </div>
+                            <div class="note-meta" style="margin-top: 0.5rem;">
                                 <span class="note-date">{{ note['created_at'].split(' ')[0] }}</span>
                                 <span class="note-time">{{ note['created_at'].split(' ')[1] }}</span>
                             </div>
                         </div>
-                        <a href="{{ url_for('delete_note', note_id=note['id']) }}" class="delete-btn" onclick="event.stopPropagation(); return confirm('Вы уверены?')">Удалить</a>
                     </summary>
                     <div class="note-content-wrapper">
                         <div class="note-content">{{ note['content'] }}</div>
@@ -51,5 +76,25 @@
             {% endif %}
         </div>
     </div>
+
+    <script>
+        const modal = document.getElementById("noteModal");
+        const btn = document.getElementById("openModal");
+        const span = document.getElementsByClassName("close-modal")[0];
+
+        btn.onclick = function() {
+            modal.style.display = "flex";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 </body>
 </html>
