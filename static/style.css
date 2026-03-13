@@ -257,6 +257,8 @@ button:hover {
 .admin-wrapper {
     display: flex;
     min-height: 100vh;
+    padding: 0;
+    justify-content: flex-start;
 }
 
 .sidebar {
@@ -268,6 +270,8 @@ button:hover {
     display: flex;
     flex-direction: column;
     position: fixed;
+    top: 0;
+    left: 0;
     height: 100vh;
     z-index: 100;
 }
