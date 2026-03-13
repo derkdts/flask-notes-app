@@ -21,9 +21,6 @@ body {
                       radial-gradient(circle at bottom left, #1e293b, transparent);
     color: var(--text-primary);
     min-height: 100vh;
-    padding: 2rem;
-    display: flex;
-    justify-content: center;
 }
 
 .container {
@@ -254,19 +251,18 @@ button:hover {
 
 /* Admin Table */
 /* Layout and Sidebar */
-.admin-wrapper {
+.app-wrapper {
     display: flex;
     min-height: 100vh;
-    padding: 0;
-    justify-content: flex-start;
 }
 
 .sidebar {
-    width: 260px;
-    background: rgba(15, 23, 42, 0.6);
+    width: 280px;
+    background: rgba(15, 23, 42, 0.4);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-right: 1px solid var(--glass-border);
-    padding: 2rem;
+    padding: 2.5rem 1.5rem;
     display: flex;
     flex-direction: column;
     position: fixed;
@@ -274,6 +270,45 @@ button:hover {
     left: 0;
     height: 100vh;
     z-index: 100;
+}
+
+.sidebar-header {
+    margin-bottom: 2.5rem;
+    padding: 0 1rem;
+}
+
+.sidebar-logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--accent-color);
+    letter-spacing: -0.05rem;
+}
+
+.sidebar-action {
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+}
+
+.sidebar-create-btn {
+    width: 100%;
+    padding: 0.8rem;
+    background: linear-gradient(135deg, #38bdf8, #818cf8);
+    border-radius: 0.75rem;
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+}
+
+.sidebar-create-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(56, 189, 248, 0.4);
 }
 
 .sidebar-logo {
@@ -317,10 +352,17 @@ button:hover {
     border-top: 1px solid var(--glass-border);
 }
 
+.main-content {
+    flex: 1;
+    margin-left: 280px;
+    padding: 3rem 4rem;
+    max-width: 1200px;
+}
+
 .admin-content {
     flex: 1;
-    margin-left: 260px;
-    padding: 2rem 4rem;
+    margin-left: 280px;
+    padding: 3rem 4rem;
 }
 
 /* User Pill Navigation */

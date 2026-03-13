@@ -6,63 +6,44 @@
     <title>CloudNotes | Flask Edition</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-    <div class="user-control">
-        <span class="username-tag">{{ current_user.username }}</span>
-        {% if current_user.role == 'admin' %}
-            <a href="{{ url_for('admin') }}" class="admin-link">Админпанель</a>
-        {% endif %}
-        <a href="{{ url_for('logout') }}" class="logout-link">Выход</a>
-    </div>
+<body class="app-wrapper">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">CloudNotes</div>
+        </div>
+        
+        <div class="sidebar-action">
+            <button id="addNoteBtn" class="sidebar-create-btn">+ Создать заметку</button>
+        </div>
 
-    <div class="container">
-        <header>
-            <h1>CloudNotes</h1>
-            <nav class="main-nav">
-                <button id="addNoteBtn" class="create-btn">+ Создать заметку</button>
-            </nav>
-        </header>
+        <nav class="sidebar-nav">
+            <a href="{{ url_for('index') }}" class="sidebar-link active">🏠 Главная</a>
+            {% if current_user.role == 'admin' %}
+                <a href="{{ url_for('admin') }}" class="sidebar-link">⚙️ Админпанель</a>
+            {% endif %}
+        </nav>
 
-        <!-- Modal for Note Creation -->
-        <div id="noteModal" class="modal">
-            <div class="modal-content glass-card">
-                <span class="close-modal">&times;</span>
-                <h2>Новая заметка</h2>
-                <form action="{{ url_for('add_note') }}" method="POST">
-                    <div class="form-group">
-                        <label for="title">Заголовок</label>
-                        <input type="text" name="title" id="title" placeholder="Введите название..." required>
-                    </div>
-                    <div class="form-group">
-                        <label for="content">Содержание</label>
-                        <textarea name="content" id="content" rows="4" placeholder="Ваши мысли..." required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="category_ids">Категории (удерживайте Ctrl для выбора нескольких)</label>
-                        <select name="category_ids" id="category_ids" multiple>
-                            {% for cat in all_categories %}
-                                <option value="{{ cat['id'] }}">{{ cat['name'] }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="new_category">Или создайте новую</label>
-                        <input type="text" name="new_category" id="new_category" placeholder="Название новой категории...">
-                    </div>
-                    <button type="submit">Сохранить заметку</button>
-                </form>
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <span class="username-tag">{{ current_user.username }}</span>
+                <a href="{{ url_for('logout') }}" class="logout-link">Выход</a>
             </div>
         </div>
+    </aside>
+
+    <main class="main-content">
+        <header style="text-align: left; margin-bottom: 3rem;">
+            <h1>Ваши заметки</h1>
+        </header>
+
+        {% if not notes %}
+            <div class="glass-card" style="text-align: center; padding: 4rem;">
+                <p style="color: var(--text-secondary); font-size: 1.1rem;">У вас пока нет заметок. Нажмите «Создать заметку», чтобы начать!</p>
+            </div>
+        {% endif %}
 
         <div class="notes-accordion">
             {% for note in notes %}
-                <details class="glass-card note-accordion-item">
-                    <summary class="note-summary">
-                        <div class="note-header-info">
-                            <h3 class="note-title">{{ note['title'] }}</h3>
-                            <div class="category-list">
-                                {% for cat_name in note['categories'] %}
-                                    <span class="category-pill">{{ cat_name }}</span>
                                 {% endfor %}
                             </div>
                             <div class="note-meta" style="margin-top: 0.5rem;">

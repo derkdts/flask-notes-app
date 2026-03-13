@@ -6,21 +6,23 @@
     <title>Админпанель | CloudNotes</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body class="admin-wrapper">
+<body class="app-wrapper">
     <aside class="sidebar">
-        <div class="sidebar-logo">CloudNotes</div>
+        <div class="sidebar-header">
+            <div class="sidebar-logo">CloudNotes</div>
+        </div>
         <nav class="sidebar-nav">
-            <a href="{{ url_for('admin') }}" class="sidebar-link active">Заметки</a>
-            <a href="{{ url_for('manage_categories') }}" class="sidebar-link">Категории</a>
-            <a href="{{ url_for('stats') }}" class="sidebar-link">Статистика</a>
-            <a href="{{ url_for('manage_users') }}" class="sidebar-link">Доступ</a>
+            <a href="{{ url_for('index') }}" class="sidebar-link">🏠 Главная</a>
+            <a href="{{ url_for('admin') }}" class="sidebar-link active">⚙️ Заметки</a>
+            <a href="{{ url_for('manage_categories') }}" class="sidebar-link">🏷️ Категории</a>
+            <a href="{{ url_for('stats') }}" class="sidebar-link">📊 Статистика</a>
+            <a href="{{ url_for('manage_users') }}" class="sidebar-link">👥 Доступ</a>
         </nav>
         <div class="sidebar-footer">
             <div class="user-info">
                 <span class="username-tag">{{ current_user.username }}</span>
                 <a href="{{ url_for('logout') }}" class="logout-link">Выход</a>
             </div>
-            <a href="{{ url_for('index') }}" class="nav-link" style="display: block; margin-top: 1rem;">← На главную</a>
         </div>
     </aside>
 
